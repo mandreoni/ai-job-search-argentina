@@ -18,25 +18,32 @@ interviews.
 
 A structured workflow that turns Claude Code into a full job-application assistant:
 
-```
-/setup             /scrape                 /apply <url | text>
-   |                   |                          |
-  v                  v                         v
-Fill in your     WebSearch across         Fetch full posting
-profile           Bumeran, Zonajobs,       Evaluate fit -> score
-   |              LinkedIn + Remotive/         |
-  v               Jobicy APIs              Draft CV + cover letter (LaTeX)
-Profile files         |                    -> reviewer agent critiques
-ready            Ranked shortlist          -> revise -> compile PDFs
-                  by fit                        |
-                      |                   Finished PDFs to review & submit
-                     v
-                 Pick one -> /apply
+```mermaid
+flowchart LR
+    setup["/setup"]
+    scrape["/scrape"]
+    apply["/apply"]
+
+    setup --> profile["Profile files\n(skills, experience,\ntarget roles)"]
+
+    scrape --> search["WebSearch\nBumeran · Zonajobs\nLinkedIn · startups"]
+    scrape --> apis["Remotive + Jobicy APIs\n(remote / LATAM)"]
+    search --> ranked["Ranked shortlist\nby fit"]
+    apis --> ranked
+    ranked -->|pick one| apply
+
+    apply --> fetch["Fetch full posting\n(URL or paste)"]
+    fetch --> fit["Evaluate fit\nagainst profile"]
+    fit --> draft["Draft CV + cover letter\n(LaTeX)"]
+    draft --> review["Reviewer agent\ncritiques & revises"]
+    review --> pdfs["Compile & verify PDFs\n2-page CV · 1-page letter"]
+    pdfs --> submit["✅ Ready to submit"]
+
+    profile -.->|grounds| fit
 ```
 
 **It tailors and reviews; it does not auto-submit.** You get finished, layout-verified
-PDFs — you click "apply" and upload them yourself (auto-submitting violates Indeed/LinkedIn
-terms and produces worse applications anyway).
+PDFs — you click "apply" and upload them yourself.
 
 ## Job discovery
 
